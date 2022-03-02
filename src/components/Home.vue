@@ -1,14 +1,22 @@
 <template>
   <div>
-    <h3>Home</h3>
+    <h3>Home1</h3>
     <el-button>login</el-button>
   </div>
 
 </template>
 <script>
 export default {
-  name: 'Home'
+  name: 'Home',
+  mounted() {
+    this.$requset.get('/login',{name:'jack'},{mock:true}).then(res=>{
+      console.log(res)
+    })
+
+
+  }
 }
+
 
 </script>
 
