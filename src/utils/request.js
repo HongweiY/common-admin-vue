@@ -26,7 +26,6 @@ serve.interceptors.request.use(function (req) {
 //响应拦截
 serve.interceptors.response.use(function (res) {
     const {code, data, msg} = res.data
-    debugger
     if (code === 200) {
         return data
     } else if (code === 40001) {
@@ -52,6 +51,7 @@ function request(options) {
     if (options.method.toLowerCase() === 'get') {
         options.params = options.data
     }
+
     //生产环境强制使用baseAPI
     if (config.env === 'prod') {
         serve.defaults.baseURL = config.baseApi
