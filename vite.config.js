@@ -5,15 +5,19 @@ const path = require('path')
 // https://vitejs.dev/config/
 export default defineConfig({
     server: {
-        port: 8080
+        port: 8080,
+        proxy: {
+            '/api': {
+                target: 'http://127.0.0.1:3000/'
+            }
+        }
     },
     resolve: {
-        alias: [
+        alias:
             {
-                find: '@',
-                replacement: path.resolve(__dirname, './src')
+                '@': path.resolve(__dirname, './src')
 
-            }]
+            }
     },
     plugins: [vue()]
 })

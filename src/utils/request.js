@@ -6,20 +6,21 @@ import axios from "axios";
 import config from "../config";
 import {ElMessage} from "element-plus";
 import router from "../router";
+import storage from "./storage";
 
 const TOKEN_INVALID = 'token异常，请重新登录'
 const NETWORK_ERROR = '网络异常，稍后再试'
 
 //添加全局配置
 const serve = axios.create({
-    baseURL: config.baseApi,
-    timeout: 8000
+    baseURL: config.baseApi, timeout: 8000
 })
 
 //请求拦截
 serve.interceptors.request.use(function (req) {
     const headers = req.headers
-    if (!headers.Authorization) headers.Authorization = 'Bear hello'
+    const {token} = storage.getItem('userInfo')
+    if (!headers.Authorization) headers.Authorization = 'Bearer '+token
     return req
 })
 
@@ -28,7 +29,7 @@ serve.interceptors.response.use(function (res) {
     const {code, data, msg} = res.data
     if (code === 200) {
         return data
-    } else if (code === 40001) {
+    } else if (code === 50001) {
         ElMessage.error(TOKEN_INVALID)
         setTimeout(function () {
             router.push('/login')
@@ -51,7 +52,9 @@ function request(options) {
     if (options.method.toLowerCase() === 'get') {
         options.params = options.data
     }
-
+    if (typeof options.mock !== 'undefined') {
+        config.mock = options.mock
+    }
     //生产环境强制使用baseAPI
     if (config.env === 'prod') {
         serve.defaults.baseURL = config.baseApi
@@ -64,10 +67,7 @@ function request(options) {
 ['get', 'post', 'put', 'delete', 'patch'].forEach((item) => {
     request[item] = (url, data, options) => {
         return request({
-            url,
-            data,
-            method: item,
-            ...options
+            url, data, method: item, ...options
         })
     }
 })
