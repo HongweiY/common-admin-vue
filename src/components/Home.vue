@@ -55,9 +55,7 @@
         </div>
       </div>
       <div class="wrapper">
-        <div class="main-content">
           <router-view></router-view>
-        </div>
       </div>
     </div>
   </div>
