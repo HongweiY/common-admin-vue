@@ -20,7 +20,7 @@ const serve = axios.create({
 serve.interceptors.request.use(function (req) {
     const headers = req.headers
     const {token} = storage.getItem('userInfo')
-    if (!headers.Authorization) headers.Authorization = 'Bearer '+token
+    if (!headers.Authorization) headers.Authorization = 'Bearer ' + token
     return req
 })
 
@@ -52,14 +52,15 @@ function request(options) {
     if (options.method.toLowerCase() === 'get') {
         options.params = options.data
     }
+    let isMock = config.mock
     if (typeof options.mock !== 'undefined') {
-        config.mock = options.mock
+        isMock = options.mock
     }
     //生产环境强制使用baseAPI
     if (config.env === 'prod') {
         serve.defaults.baseURL = config.baseApi
     } else {
-        serve.defaults.baseURL = config.mock ? config.mockApi : config.baseApi
+        serve.defaults.baseURL = isMock ? config.mockApi : config.baseApi
     }
     return serve(options)
 }

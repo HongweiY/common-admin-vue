@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  name: "Welcome"
+  name: 'WelcomeView'
 }
 </script>
 

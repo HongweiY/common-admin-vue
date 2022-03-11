@@ -20,8 +20,8 @@
 <script>
 
 export default {
-  name: "Login",
-  data() {
+  name: 'LoginView',
+  data () {
     return {
       user: {
         username: '',
@@ -30,19 +30,19 @@ export default {
       rules: {
         username: [
           {
-            required: true, message: "请输入用户名", trigger: 'blur'
+            required: true, message: '请输入用户名', trigger: 'blur'
           }
         ],
         userPwd: [
           {
-            required: true, message: "请输入密码", trigger: 'blur'
+            required: true, message: '请输入密码', trigger: 'blur'
           }
         ]
       }
     }
   },
   methods: {
-    login() {
+    login () {
       this.$refs.userForm.validate((valid) => {
         if (valid) {
           this.$api.login(this.user).then((res) => {
@@ -53,8 +53,6 @@ export default {
           return false
         }
       })
-
-
     }
   }
 }

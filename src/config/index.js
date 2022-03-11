@@ -21,7 +21,7 @@ const EnvConfig = {
 
 export default {
     env: 'dev',
-    mock: true,
+    mock: false,
     namespace: 'admin',
     ...EnvConfig[env]
 }
