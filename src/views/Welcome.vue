@@ -1,19 +1,23 @@
 <template>
   <div class="welcome">
     <div class="content">
-      <div class="subtitle">欢迎体验</div>
-      <div class="title">通用后台管理系统</div>
+      <div class="subtitle">
+        欢迎体验
+      </div>
+      <div class="title">
+        通用后台管理系统
+      </div>
       <div class="desc">
         - vue 3.0 +elementPlus + Node + Mongo打造通用后台管理系统
       </div>
     </div>
-    <div class="img"></div>
+    <div class="img" />
   </div>
 </template>
 
 <script>
 export default {
-  name: 'WelcomeView'
+    name: 'Welcome'
 }
 </script>
 

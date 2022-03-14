@@ -1,106 +1,239 @@
 <template>
-  <div class='user'>
-    <div class='query-form'>
-      <el-form :inline='true' :model='user' ref='userForm'>
-        <el-form-item prop='userName' label='用户名'>
-          <el-input placeholder='请输入用户名' v-model='user.userName' />
+  <div class="user">
+    <div class="query-form">
+      <el-form
+        ref="userForm"
+        :inline="true"
+        :model="user"
+      >
+        <el-form-item
+          prop="userName"
+          label="用户名"
+        >
+          <el-input
+            v-model="user.userName"
+            placeholder="请输入用户名"
+          />
         </el-form-item>
-        <el-form-item prop='userEmail' label='用户邮箱'>
-          <el-input placeholder='请输入用户邮箱' v-model='user.userEmail' />
+        <el-form-item
+          prop="userEmail"
+          label="用户邮箱"
+        >
+          <el-input
+            v-model="user.userEmail"
+            placeholder="请输入用户邮箱"
+          />
         </el-form-item>
-        <el-form-item label='用户状态' prop='state'>
-          <el-select v-model='user.state' placeholder='请选择用户状态'>
-            <el-option :value='0' label='所有' />
-            <el-option :value='1' label='在职' />
-            <el-option :value='2' label='离职' />
-            <el-option :value='3' label='试用期' />
+        <el-form-item
+          label="用户状态"
+          prop="state"
+        >
+          <el-select
+            v-model="user.state"
+            placeholder="请选择用户状态"
+          >
+            <el-option
+              :value="0"
+              label="所有"
+            />
+            <el-option
+              :value="1"
+              label="在职"
+            />
+            <el-option
+              :value="2"
+              label="离职"
+            />
+            <el-option
+              :value="3"
+              label="试用期"
+            />
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type='primary' @click='handelQuery'>查询</el-button>
-          <el-button @click="handelRest('userForm')">重置</el-button>
+          <el-button
+            type="primary"
+            @click="handelQuery"
+          >
+            查询
+          </el-button>
+          <el-button @click="handelRest('userForm')">
+            重置
+          </el-button>
         </el-form-item>
       </el-form>
     </div>
-    <div class='base-table'>
-      <div class='action'>
-        <el-button type='primary' @click="showForm('create',{})">新增</el-button>
-        <el-button type='danger' @click='batchDelete'>批量删除</el-button>
+    <div class="base-table">
+      <div class="action">
+        <el-button
+          type="primary"
+          @click="showForm('create',{})"
+        >
+          新增
+        </el-button>
+        <el-button
+          type="danger"
+          @click="batchDelete"
+        >
+          批量删除
+        </el-button>
       </div>
       <el-table
-        :data='userList'
-        @selection-change='handleSelectionChange'
+        :data="userList"
+        @selection-change="handleSelectionChange"
       >
-        <el-table-column type='selection' width='55' />
-        <el-table-column v-for='item in columns'
-                         :key='item.property'
-                         :label='item.label'
-                         :formatter='item.formatter'
-                         :property='item.property' />
-        <el-table-column label='操作' width='240'>
-          <template #default='scope'>
-            <el-button @click="showForm('edit',scope.row)">编辑</el-button>
-            <el-button type='danger' @click='userDel(scope.row)'>删除</el-button>
+        <el-table-column
+          type="selection"
+          width="55"
+        />
+        <el-table-column
+          v-for="item in columns"
+          :key="item.property"
+          :label="item.label"
+          :formatter="item.formatter"
+          :property="item.property"
+        />
+        <el-table-column
+          label="操作"
+          width="240"
+        >
+          <template #default="scope">
+            <el-button @click="showForm('edit',scope.row)">
+              编辑
+            </el-button>
+            <el-button
+              type="danger"
+              @click="userDel(scope.row)"
+            >
+              删除
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
       <el-pagination
-        :hide-on-single-page='pager.total>1'
-        :page-size='pager.pageSize'
-        class='pagination'
+        :hide-on-single-page="pager.total>1"
+        :page-size="pager.pageSize"
+        class="pagination"
         background
-        :total='pager.total'
-        @current-change='handelPageChange'
-        layout='prev,pager,next'
-      >
-      </el-pagination>
+        :total="pager.total"
+        layout="prev,pager,next"
+        @current-change="handelPageChange"
+      />
     </div>
     <!-- 添加用户-->
-    <el-dialog v-model='userFormVisible' :title="formMethod==='edit'?'编辑用户':'新增用户'">
-      <el-form :model='userCreateForm' :label-width='formLabelWidth' :rules='rules' ref='userCreateFormRef'>
-        <el-form-item prop='userName' label='用户名'>
-          <el-input v-model='userCreateForm.userName' placeholder='请输入用户名' :disabled="formMethod==='edit'" />
+    <el-dialog
+      v-model="userFormVisible"
+      :title="formMethod==='edit'?'编辑用户':'新增用户'"
+    >
+      <el-form
+        ref="userCreateFormRef"
+        :model="userCreateForm"
+        :label-width="formLabelWidth"
+        :rules="rules"
+      >
+        <el-form-item
+          prop="userName"
+          label="用户名"
+        >
+          <el-input
+            v-model="userCreateForm.userName"
+            placeholder="请输入用户名"
+            :disabled="formMethod==='edit'"
+          />
         </el-form-item>
-        <el-form-item prop='userEmail' label='邮箱'>
-          <el-input v-model='userCreateForm.userEmail' placeholder='请输入邮箱' :disabled="formMethod==='edit'">
+        <el-form-item
+          prop="userEmail"
+          label="邮箱"
+        >
+          <el-input
+            v-model="userCreateForm.userEmail"
+            placeholder="请输入邮箱"
+            :disabled="formMethod==='edit'"
+          >
             <template #append>
               @ymfsder.com
             </template>
           </el-input>
         </el-form-item>
-        <el-form-item prop='mobile' label='手机号'>
-          <el-input v-model='userCreateForm.mobile' placeholder='请输入手机号' />
+        <el-form-item
+          prop="mobile"
+          label="手机号"
+        >
+          <el-input
+            v-model="userCreateForm.mobile"
+            placeholder="请输入手机号"
+          />
         </el-form-item>
-        <el-form-item prop='job' label='岗位'>
-          <el-input v-model='userCreateForm.job' placeholder='请输入岗位' />
+        <el-form-item
+          prop="job"
+          label="岗位"
+        >
+          <el-input
+            v-model="userCreateForm.job"
+            placeholder="请输入岗位"
+          />
         </el-form-item>
-        <el-form-item prop='state' label='状态'>
-          <el-select v-model='userCreateForm.state' placeholder='请选择用户状态'>
-            <el-option label='在职' :value='1' />
-            <el-option label='离职' :value='2' />
-            <el-option label='试用期' :value='3' />
+        <el-form-item
+          prop="state"
+          label="状态"
+        >
+          <el-select
+            v-model="userCreateForm.state"
+            placeholder="请选择用户状态"
+          >
+            <el-option
+              label="在职"
+              :value="1"
+            />
+            <el-option
+              label="离职"
+              :value="2"
+            />
+            <el-option
+              label="试用期"
+              :value="3"
+            />
           </el-select>
         </el-form-item>
-        <el-form-item prop='roleList' label='系统角色'>
-          <el-select v-model='userCreateForm.roleList' placeholder='请选择系统角色' multiple style='width: 100%'>
-            <el-option v-for='role in roleList' :label='role.roleName' :key='role._id' :value='role._id' />
+        <el-form-item
+          prop="roleList"
+          label="系统角色"
+        >
+          <el-select
+            v-model="userCreateForm.roleList"
+            placeholder="请选择系统角色"
+            multiple
+            style="width: 100%"
+          >
+            <el-option
+              v-for="role in roleList"
+              :key="role._id"
+              :label="role.roleName"
+              :value="role._id"
+            />
           </el-select>
         </el-form-item>
-        <el-form-item prop='deptId' label='所属部门'>
+        <el-form-item
+          prop="deptId"
+          label="所属部门"
+        >
           <el-cascader
-            placeholder='请选择用户所属部门'
-            v-model='userCreateForm.deptId'
-            :options='deptList'
-            style='width: 100%'
-            :props="{checkStrictly:true,value:'_id',label:'deptName'}" />
+            v-model="userCreateForm.deptId"
+            placeholder="请选择用户所属部门"
+            :options="deptList"
+            style="width: 100%"
+            :props="{checkStrictly:true,value:'_id',label:'deptName'}"
+          />
         </el-form-item>
       </el-form>
       <template #footer>
-      <span class='dialog-footer'>
-        <el-button @click="handelRest('userCreateFormRef')">取消</el-button>
-        <el-button type='primary' @click='submitUserCreateForm'>确定</el-button
-        >
-      </span>
+        <span class="dialog-footer">
+          <el-button @click="handelRest('userCreateFormRef')">取消</el-button>
+          <el-button
+            type="primary"
+            @click="submitUserCreateForm"
+          >确定</el-button>
+        </span>
       </template>
     </el-dialog>
   </div>
@@ -171,7 +304,7 @@ const columns = reactive([
   {
     label: '用户角色',
     property: 'role',
-    formatter (row, column, val) {
+    formatter(row, column, val) {
       return {
         0: '管理员',
         1: '普通用户'
@@ -180,8 +313,9 @@ const columns = reactive([
   },
   {
     label: '用户状态',
+    
     property: 'state',
-    formatter (row, column, val) {
+    formatter(row, column, val) {
       return {
         1: '在职',
         2: '离职',
@@ -192,14 +326,14 @@ const columns = reactive([
   {
     label: '注册时间',
     property: 'createTime',
-    formatter (row, column, val) {
+    formatter(row, column, val) {
       return utils.FormatDate(val, 'YYYY-MM-DD HH:mm:ss')
     }
   },
   {
     label: '最后登陆时间',
     property: 'lastLoginTime',
-    formatter (row, column, val) {
+    formatter(row, column, val) {
       return utils.FormatDate(val, 'YYYY-MM-DD HH:mm:ss')
     }
   }
