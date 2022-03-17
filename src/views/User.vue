@@ -246,7 +246,7 @@ import utils from '../utils/utils'
 
 const { proxy } = getCurrentInstance()
 const user = reactive({
-  state: 0
+  state: 1
 })
 // 新增用户验证
 const rules = reactive({
@@ -441,7 +441,7 @@ const getDeptList = async () => {
 
 // 获取角色列表
 const getRoleList = async () => {
-  const list = await proxy.$api.getRoleList()
+  const list = await proxy.$api.getAllRolesList()
   roleList.value = list
 }
 

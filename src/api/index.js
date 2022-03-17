@@ -12,7 +12,6 @@ export default {
             data: params
         })
     },
-
     getNoticeCount() {
         return request({
             url: '/notice/count',
@@ -43,14 +42,6 @@ export default {
             data: params
         })
     },
-    getRoleList() {
-        return request({
-            url: '/role/list',
-            method: 'get',
-            data: {},
-            mock: true
-        })
-    },
     getDeptList() {
         return request({
             url: '/dept/list',
@@ -66,6 +57,7 @@ export default {
             data: params
         })
     },
+    // 菜单模块
     createMenu(params) {
         return request({
             url: '/menus/create',
@@ -78,6 +70,43 @@ export default {
             url: '/menus/del',
             method: 'post',
             data: menuId
+        })
+    },
+    // 角色模块
+    getAllRolesList() {
+        return request({
+            url: '/roles/allList',
+            method: 'get',
+            data: {}
+        })
+    },
+    getRolesList(params) {
+        return request({
+            url: '/roles/list',
+            method: 'get',
+            data: params
+        })
+    },
+    operateRole(params) {
+        return request({
+            url: '/roles/operate',
+            method: 'post',
+            data: params
+        })
+
+    },
+    deleteRoles(params) {
+        return request({
+            url: '/roles/del',
+            method: 'post',
+            data: params
+        })
+    },
+    updatePermission(params) {
+        return request({
+            url: '/roles/permission/update',
+            method: 'post',
+            data: params
         })
     }
 }

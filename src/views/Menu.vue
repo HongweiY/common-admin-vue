@@ -237,13 +237,13 @@ const rules = reactive({
       trigger: 'blur'
     }
   ],
-  path: [
-    {
-      required: true,
-      message: '请填写路径',
-      trigger: 'blur'
-    }
-  ]
+  // path: [
+  //   {
+  //     required: true,
+  //     message: '请填写路径',
+  //     trigger: 'blur'
+  //   }
+  // ]
 })
 const formLabelWidth = ref('80px')
 // 表单是否显示
