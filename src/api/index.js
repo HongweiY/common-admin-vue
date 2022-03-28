@@ -42,12 +42,11 @@ export default {
             data: params
         })
     },
-    getDeptList() {
+    getDeptList(params) {
         return request({
             url: '/dept/list',
             method: 'get',
-            data: {},
-            mock: true
+            data: params
         })
     },
     createUser(params) {
@@ -108,5 +107,28 @@ export default {
             method: 'post',
             data: params
         })
+    },
+    //部门管理
+    getAllUsers() {
+        return request({
+            url: '/users/allUsers',
+            method: 'get',
+            data: {}
+        })
+    },
+    operateDept(params) {
+        return request({
+            url: 'dept/operate',
+            method: 'post',
+            data: params
+        })
+    },
+    delDept(params) {
+        return request({
+            url: 'dept/delete',
+            method: 'post',
+            data: params
+        })
     }
+
 }

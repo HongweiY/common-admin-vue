@@ -1,16 +1,37 @@
 <template>
   <div class="login-wrapper">
     <div class="modal">
-      <el-form :model="user" status-icon :rules="rules" ref="userForm">
-        <div class="title">admin</div>
+      <el-form
+        ref="userForm"
+        :model="user"
+        status-icon
+        :rules="rules"
+      >
+        <div class="title">
+          admin
+        </div>
         <el-form-item prop="username">
-          <el-input type="text" prefix-icon="user" v-model="user.username"/>
+          <el-input
+            v-model="user.username"
+            type="text"
+            prefix-icon="user"
+          />
         </el-form-item>
         <el-form-item prop="userPwd">
-          <el-input type="password" prefix-icon="view" v-model="user.userPwd"/>
+          <el-input
+            v-model="user.userPwd"
+            type="password"
+            prefix-icon="view"
+          />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" class="login-btn" @click="login">登陆</el-button>
+          <el-button
+            type="primary"
+            class="login-btn"
+            @click="login"
+          >
+            登陆
+          </el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -66,6 +87,7 @@ export default {
   align-items: center;
   justify-content: center;
   background: #f9fcff;
+  margin-top: -3vh;
 
   .modal {
     width: 600px;
