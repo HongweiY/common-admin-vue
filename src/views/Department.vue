@@ -31,6 +31,7 @@
     <div class="base-table">
       <div class="action">
         <el-button
+          v-has="'dept-add'"
           type="primary"
           @click="showForm('create',{})"
         >
@@ -55,12 +56,14 @@
             #default="scope"
           >
             <el-button
+              v-has="'dept-edit'"
               type="primary"
               @click="handelEdit(scope.row)"
             >
               编辑
             </el-button>
             <el-button
+              v-has="'dept-delete'"
               type="danger"
               @click="handelDel(scope.row._id)"
             >

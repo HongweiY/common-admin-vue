@@ -53,6 +53,7 @@
     <div class="base-table">
       <div class="action">
         <el-button
+          v-has="'menu-add'"
           type="primary"
           @click="showForm('create','level1',{},)"
         >
@@ -76,13 +77,20 @@
           width="240"
         >
           <template #default="scope">
-            <el-button @click="showForm('create','other',scope.row)">
+            <el-button
+              v-has="'menu-add'"
+              @click="showForm('create','other',scope.row)"
+            >
               新增
             </el-button>
-            <el-button @click="showForm('edit','',scope.row)">
+            <el-button
+              v-has="'menu-edit'"
+              @click="showForm('edit','',scope.row)"
+            >
               编辑
             </el-button>
             <el-button
+              v-has="'menu-delete'"
               type="danger"
               @click="userDel(scope.row)"
             >
@@ -236,7 +244,7 @@ const rules = reactive({
       message: '菜单名称最长为5个字段',
       trigger: 'blur'
     }
-  ],
+  ]
   // path: [
   //   {
   //     required: true,
@@ -249,7 +257,7 @@ const formLabelWidth = ref('80px')
 // 表单是否显示
 const menuFormVisible = ref(false)
 const menuForm = reactive({
-  parentId:[null],
+  parentId: [null],
   menuType: 1,
   menuState: 1
 
@@ -344,8 +352,8 @@ const showForm = (method, type, row) => {
       menuForm.parentId = [...row.parentId, row._id].filter((item) => item)
     }
 
-    if (method==='edit'){
-     Object.assign( menuForm, row)
+    if (method === 'edit') {
+      Object.assign(menuForm, row)
     }
   })
   menuFormVisible.value = true

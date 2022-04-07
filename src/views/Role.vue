@@ -32,6 +32,7 @@
     <div class="base-table">
       <div class="action">
         <el-button
+          v-has="'role-add'"
           type="primary"
           @click="showDialog('create',{})"
         >
@@ -53,16 +54,21 @@
           :width="300"
         >
           <template #default="scope">
-            <el-button @click="showDialog('edit',scope.row)">
+            <el-button
+              v-has="'role-edit'"
+              @click="showDialog('edit',scope.row)"
+            >
               编辑
             </el-button>
             <el-button
+              v-has="'role-operate'"
               type="primary"
               @click="showPermissionDialog(scope.row)"
             >
               设置权限
             </el-button>
             <el-button
+              v-has="'role-delete'"
               type="danger"
               @click="handelDel(scope.row._id)"
             >

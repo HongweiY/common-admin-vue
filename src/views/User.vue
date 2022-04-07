@@ -66,12 +66,14 @@
     <div class="base-table">
       <div class="action">
         <el-button
+          v-has="'user-create'"
           type="primary"
           @click="showForm('create',{})"
         >
           新增
         </el-button>
         <el-button
+          v-has="'user-batch-delete'"
           type="danger"
           @click="batchDelete"
         >
@@ -98,10 +100,14 @@
           width="240"
         >
           <template #default="scope">
-            <el-button @click="showForm('edit',scope.row)">
+            <el-button
+              v-has="'user-edit'"
+              @click="showForm('edit',scope.row)"
+            >
               编辑
             </el-button>
             <el-button
+              v-has="'user-delete'"
               type="danger"
               @click="userDel(scope.row)"
             >
@@ -313,7 +319,7 @@ const columns = reactive([
   },
   {
     label: '用户状态',
-    
+
     property: 'state',
     formatter(row, column, val) {
       return {

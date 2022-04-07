@@ -129,6 +129,13 @@ export default {
             method: 'post',
             data: params
         })
+    },
+    getPermission() {
+        return request({
+            url: '/users/permission',
+            method: 'get',
+            data: {}
+        })
     }
 
 }
