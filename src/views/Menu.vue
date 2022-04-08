@@ -290,7 +290,12 @@ const columns = reactive([
   {
     label: '路由地址',
     property: 'path'
-  }, {
+  },
+  {
+    label: '组件路径',
+    property: 'component'
+  },
+  {
     label: '菜单状态',
     property: 'menuState',
     formatter(row, column, val) {

@@ -16,10 +16,34 @@ export default {
 
         for (const k in option) {
             if (new RegExp(`(${k})`).test(format)) {
-                const val = `${option[k]  }`
-                format = format.replace(RegExp.$1, RegExp.$1.length === 1 ? val : (`00${  val}`).substring(val.length))
+                const val = `${option[k]}`
+                format = format.replace(RegExp.$1, RegExp.$1.length === 1 ? val : (`00${val}`).substring(val.length))
             }
         }
         return format
+    },
+    generateRoute(menuList) {
+        const routesList = []
+        const deep = (arr) => {
+            while (arr.length) {
+                const item = arr.pop()
+                const childRoute = {}
+                if (item.component) {
+                    // eslint-disable-next-line array-callback-return
+                    childRoute.path = item.path
+                    childRoute.component = item.component
+                    childRoute.meta = { title: item.menuName }
+                    childRoute.name = item.menuCode
+                    routesList.push(childRoute)
+                }
+
+                if (item.children) {
+                    deep(item.children)
+                }
+
+            }
+        }
+        deep(menuList)
+        return routesList
     }
 }
