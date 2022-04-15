@@ -10,7 +10,7 @@
           <el-input v-model="user.userPwd" type="password" prefix-icon="view" />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" class="login-btn" @click="login"> 登陆 </el-button>
+          <el-button type="primary" class="login-btn" @click="login"> 登陆</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -18,6 +18,11 @@
 </template>
 
 <script>
+import storage from '../utils/storage'
+import Api from '../api'
+import router from '../router'
+import utils from '../utils/utils'
+
 export default {
   name: 'LoginView',
   data() {
@@ -48,12 +53,28 @@ export default {
     login() {
       this.$refs.userForm.validate(valid => {
         if (valid) {
-          this.$api.login(this.user).then(res => {
+          this.$api.login(this.user).then(async res => {
             this.$store.commit('saveUserInfo', res)
-            this.$router.push('/welcome')
+            await this.loadAsyncRoutes()
+            await this.$router.push('/welcome')
           })
         }
       })
+    },
+    async loadAsyncRoutes() {
+      const userInfo = storage.getItem('userInfo') || {}
+      if (userInfo.token) {
+        const { menuList } = await Api.getPermission()
+        const userRoutes = utils.generateRoute(menuList)
+
+        userRoutes.forEach(route => {
+          const url = `./../views/${route.component}.vue`
+          route.push({
+            component: () => import(url /* @vite-ignore */),
+          })
+          router.addRoute('home', route)
+        })
+      }
     },
   },
 }
