@@ -9,25 +9,22 @@ import request from './utils/request'
 import storage from './utils/storage'
 import api from './api'
 
-
 const app = createApp(App)
 
-//指令控制按钮显示
+// 指令控制按钮显示
 app.directive('has', {
-    beforeMount: (el, binding) => {
-        const userAction = storage.getItem('actionList') || []
-        const value = binding.value
-        const hasPermission = userAction.includes(value)
-        if (!hasPermission) {
-            el.style = 'display:none'
-            setTimeout(() => {
-                el.parentNode.removeChild(el)
-            }, 0)
-
-        }
+  beforeMount: (el, binding) => {
+    const userAction = storage.getItem('actionList') || []
+    const { value } = binding
+    const hasPermission = userAction.includes(value)
+    if (!hasPermission) {
+      el.style = 'display:none'
+      setTimeout(() => {
+        el.parentNode.removeChild(el)
+      }, 0)
     }
+  },
 })
-
 
 app.config.globalProperties.$requset = request
 app.config.globalProperties.$storage = storage

@@ -1,37 +1,16 @@
 <template>
   <div class="login-wrapper">
     <div class="modal">
-      <el-form
-        ref="userForm"
-        :model="user"
-        status-icon
-        :rules="rules"
-      >
-        <div class="title">
-          admin
-        </div>
+      <el-form ref="userForm" :model="user" status-icon :rules="rules">
+        <div class="title">admin</div>
         <el-form-item prop="username">
-          <el-input
-            v-model="user.username"
-            type="text"
-            prefix-icon="user"
-          />
+          <el-input v-model="user.username" type="text" prefix-icon="user" />
         </el-form-item>
         <el-form-item prop="userPwd">
-          <el-input
-            v-model="user.userPwd"
-            type="password"
-            prefix-icon="view"
-          />
+          <el-input v-model="user.userPwd" type="password" prefix-icon="view" />
         </el-form-item>
         <el-form-item>
-          <el-button
-            type="primary"
-            class="login-btn"
-            @click="login"
-          >
-            登陆
-          </el-button>
+          <el-button type="primary" class="login-btn" @click="login"> 登陆 </el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -39,43 +18,44 @@
 </template>
 
 <script>
-
 export default {
   name: 'LoginView',
-  data () {
+  data() {
     return {
       user: {
         username: '',
-        userPwd: ''
+        userPwd: '',
       },
       rules: {
         username: [
           {
-            required: true, message: '请输入用户名', trigger: 'blur'
-          }
+            required: true,
+            message: '请输入用户名',
+            trigger: 'blur',
+          },
         ],
         userPwd: [
           {
-            required: true, message: '请输入密码', trigger: 'blur'
-          }
-        ]
-      }
+            required: true,
+            message: '请输入密码',
+            trigger: 'blur',
+          },
+        ],
+      },
     }
   },
   methods: {
-    login () {
-      this.$refs.userForm.validate((valid) => {
+    login() {
+      this.$refs.userForm.validate(valid => {
         if (valid) {
-          this.$api.login(this.user).then((res) => {
+          this.$api.login(this.user).then(res => {
             this.$store.commit('saveUserInfo', res)
             this.$router.push('/welcome')
           })
-        } else {
-          return false
         }
       })
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -106,10 +86,7 @@ export default {
 
     .login-btn {
       width: 100%;
-
     }
   }
-
 }
-
 </style>

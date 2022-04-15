@@ -14,11 +14,11 @@
 </template>
 <script>
 export default {
-  name: '404'
+  name: 'NotFound',
 }
 </script>
 
-<style scoped lang='scss'>
+<style scoped lang="scss">
 .container {
   display: flex;
   position: absolute;
@@ -46,8 +46,6 @@ export default {
       height: 4vh;
       width: 7vw;
     }
-
-
   }
 
   .content-right {
@@ -57,8 +55,6 @@ export default {
       margin-top: -10vh;
       height: 30vh;
     }
-
   }
 }
-
 </style>

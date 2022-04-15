@@ -7,12 +7,12 @@ import storage from '../utils/storage'
 import mutations from './mutations'
 
 const state = {
-    userInfo: storage.getItem('userInfo') || {},
-    menuList: storage.getItem('menuList') || [],
-    actionList: storage.getItem('actionList') || []
+  userInfo: storage.getItem('userInfo') || {},
+  menuList: storage.getItem('menuList') || [],
+  actionList: storage.getItem('actionList') || [],
 }
 
 export default createStore({
-    mutations,
-    state
+  mutations,
+  state,
 })
