@@ -69,9 +69,7 @@ export default {
 
         userRoutes.forEach(route => {
           const url = `./../views/${route.component}.vue`
-          route.push({
-            component: () => import(url /* @vite-ignore */),
-          })
+          route.component = () => import(url /* @vite-ignore */)
           router.addRoute('home', route)
         })
       }

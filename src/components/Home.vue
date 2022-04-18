@@ -1,6 +1,6 @@
 <template>
   <div class="base-layout">
-    <div :class="['nav-side',isCollapse?'fold':'unfold']">
+    <div :class="['nav-side', isCollapse ? 'fold' : 'unfold']">
       <!-- 系统LOGO -->
       <div class="logo">
         <img src="./../assets/logo.png" />
@@ -18,13 +18,10 @@
         <tree-menu :user-menu="userMenu" />
       </el-menu>
     </div>
-    <div :class="['content-right',isCollapse?'fold':'unfold']">
+    <div :class="['content-right', isCollapse ? 'fold' : 'unfold']">
       <div class="nav-top">
         <div class="nav-left">
-          <div
-            class="menu-fold"
-            @click="toggle"
-          >
+          <div class="menu-fold" @click="toggle">
             <el-icon :size="20">
               <expand v-show="isCollapse" />
               <Fold v-show="!isCollapse" />
@@ -35,10 +32,7 @@
           </div>
         </div>
         <div class="user-info">
-          <el-badge
-            class="notice"
-            :is-dot="noticeCount>0"
-          >
+          <el-badge class="notice" :is-dot="noticeCount > 0">
             <el-icon :size="20">
               <Bell />
             </el-icon>
@@ -52,12 +46,8 @@
             </span>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item command="email">
-                  邮箱：{{ userinfo.userEmail }}
-                </el-dropdown-item>
-                <el-dropdown-item command="logout">
-                  退出
-                </el-dropdown-item>
+                <el-dropdown-item command="email"> 邮箱：{{ userinfo.userEmail }} </el-dropdown-item>
+                <el-dropdown-item command="logout"> 退出 </el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -70,7 +60,6 @@
   </div>
 </template>
 <script>
-
 import { ArrowRight, Bell, Expand, Fold, Location, Reading, Right, Setting } from '@element-plus/icons-vue'
 import TreeMenu from './TreeMenu.vue'
 import BreadCrumb from './BreadCrumb.vue'
@@ -80,11 +69,12 @@ export default {
   components: { Expand, Reading, ArrowRight, Right, Bell, Fold, TreeMenu, BreadCrumb },
   data() {
     return {
+      // eslint-disable-next-line no-restricted-globals
       activeMenu: location.hash.slice(1),
       isCollapse: false,
       userinfo: this.$store.state.userInfo,
       noticeCount: 0,
-      userMenu: []
+      userMenu: [],
     }
   },
   mounted() {
@@ -95,31 +85,31 @@ export default {
     toggle() {
       this.isCollapse = !this.isCollapse
     },
-    //退出
+    // 退出
     handleLogout(key) {
       if (key === 'email') return
       this.$store.commit('saveUserInfo', '')
       this.userinfo = {}
       this.$router.push('/login')
     },
-    //获取通知数量
+    // 获取通知数量
     async getNoticeCount() {
       const count = await this.$api.getNoticeCount()
       this.noticeCount = count
     },
-    //获取菜单
+    // 获取菜单
     async getMenuList() {
       const { menuList, actionList } = await this.$api.getPermission()
 
       this.$store.commit('saveUserMenu', menuList)
       this.$store.commit('saveUserAction', actionList)
       this.userMenu = menuList
-    }
-  }
+    },
+  },
 }
 </script>
 
-<style scoped lang='scss'>
+<style scoped lang="scss">
 .base-layout {
   position: relative;
 
@@ -130,7 +120,7 @@ export default {
     height: 100vh;
     color: white;
     overflow: hidden;
-    transition: width .5s;
+    transition: width 0.5s;
 
     .logo {
       display: flex;
@@ -157,7 +147,6 @@ export default {
     &.unfold {
       width: 200px;
     }
-
   }
 
   .content-right {
@@ -185,11 +174,9 @@ export default {
 
         .menu-fold {
           margin-right: 15px;
-
         }
 
         .bread {
-
         }
       }
 
@@ -204,11 +191,10 @@ export default {
 
         .user-link {
           cursor: pointer;
-          color: #337ED9;
+          color: #337ed9;
         }
       }
     }
-
 
     .wrapper {
       background: #eef0f3;
@@ -220,8 +206,6 @@ export default {
         height: 100%;
       }
     }
-
   }
 }
-
 </style>
