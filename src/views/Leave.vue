@@ -20,20 +20,8 @@
     </div>
     <div class="base-table">
       <div class="action">
-        <el-button
-          v-has="'user-create'"
-          type="primary"
-          @click="showForm('create', {})"
-        >
-          新增
-        </el-button>
-        <el-button
-          v-has="'user-batch-delete'"
-          type="danger"
-          @click="batchDelete"
-        >
-          批量删除
-        </el-button>
+        <el-button v-has="'user-create'" type="primary" @click="showForm('create', {})"> 新增 </el-button>
+        <el-button v-has="'user-batch-delete'" type="danger" @click="batchDelete"> 批量删除 </el-button>
       </div>
       <el-table :data="userList" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" />
@@ -46,16 +34,8 @@
         />
         <el-table-column label="操作" width="240">
           <template #default="scope">
-            <el-button v-has="'user-edit'" @click="showForm('edit', scope.row)">
-              编辑
-            </el-button>
-            <el-button
-              v-has="'user-delete'"
-              type="danger"
-              @click="userDel(scope.row)"
-            >
-              删除
-            </el-button>
+            <el-button v-has="'user-edit'" @click="showForm('edit', scope.row)"> 编辑 </el-button>
+            <el-button v-has="'user-delete'" type="danger" @click="userDel(scope.row)"> 删除 </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -70,64 +50,32 @@
       />
     </div>
     <!-- 添加用户-->
-    <el-dialog
-      v-model="userFormVisible"
-      :title="formMethod === 'edit' ? '编辑用户' : '新增用户'"
-    >
-      <el-form
-        ref="userCreateFormRef"
-        :model="userCreateForm"
-        :label-width="formLabelWidth"
-        :rules="rules"
-      >
+    <el-dialog v-model="userFormVisible" :title="formMethod === 'edit' ? '编辑用户' : '新增用户'">
+      <el-form ref="userCreateFormRef" :model="userCreateForm" :label-width="formLabelWidth" :rules="rules">
         <el-form-item prop="userName" label="用户名">
-          <el-input
-            v-model="userCreateForm.userName"
-            placeholder="请输入用户名"
-            :disabled="formMethod === 'edit'"
-          />
+          <el-input v-model="userCreateForm.userName" placeholder="请输入用户名" :disabled="formMethod === 'edit'" />
         </el-form-item>
         <el-form-item prop="userEmail" label="邮箱">
-          <el-input
-            v-model="userCreateForm.userEmail"
-            placeholder="请输入邮箱"
-            :disabled="formMethod === 'edit'"
-          >
+          <el-input v-model="userCreateForm.userEmail" placeholder="请输入邮箱" :disabled="formMethod === 'edit'">
             <template #append> @ymfsder.com</template>
           </el-input>
         </el-form-item>
         <el-form-item prop="mobile" label="手机号">
-          <el-input
-            v-model="userCreateForm.mobile"
-            placeholder="请输入手机号"
-          />
+          <el-input v-model="userCreateForm.mobile" placeholder="请输入手机号" />
         </el-form-item>
         <el-form-item prop="job" label="岗位">
           <el-input v-model="userCreateForm.job" placeholder="请输入岗位" />
         </el-form-item>
         <el-form-item prop="state" label="状态">
-          <el-select
-            v-model="userCreateForm.state"
-            placeholder="请选择用户状态"
-          >
+          <el-select v-model="userCreateForm.state" placeholder="请选择用户状态">
             <el-option label="在职" :value="1" />
             <el-option label="离职" :value="2" />
             <el-option label="试用期" :value="3" />
           </el-select>
         </el-form-item>
         <el-form-item prop="roleList" label="系统角色">
-          <el-select
-            v-model="userCreateForm.roleList"
-            placeholder="请选择系统角色"
-            multiple
-            style="width: 100%"
-          >
-            <el-option
-              v-for="role in roleList"
-              :key="role._id"
-              :label="role.roleName"
-              :value="role._id"
-            />
+          <el-select v-model="userCreateForm.roleList" placeholder="请选择系统角色" multiple style="width: 100%">
+            <el-option v-for="role in roleList" :key="role._id" :label="role.roleName" :value="role._id" />
           </el-select>
         </el-form-item>
         <el-form-item prop="deptId" label="所属部门">
@@ -143,9 +91,7 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="handelRest('userCreateFormRef')">取消</el-button>
-          <el-button type="primary" @click="submitUserCreateForm"
-            >确定</el-button
-          >
+          <el-button type="primary" @click="submitUserCreateForm">确定</el-button>
         </span>
       </template>
     </el-dialog>
@@ -177,72 +123,43 @@ const columns = reactive([
     property: 'orderNo',
   },
   {
-    label: '申请类型',
-    property: 'applyType',
-  },
-  {
     label: '休假时间',
     property: 'userEmail',
   },
   {
     label: '休假时长',
-    property: 'role',
+    property: 'leaveTime',
   },
   {
-    label: '休假时长',
-    property: 'role',
-  },
-  {
-    label: '休假时长',
-    property: 'role',
-  },
-  {
-    label: '休假时长',
-    property: 'role',
-  },
-  {
-    label: '休假时长',
-    property: 'role',
-  },
-  {
-    label: '休假时长',
-    property: 'role',
-  },
-  {
-    label: '用户状态',
-    property: 'state',
+    label: '休假类型',
+    property: 'applyType',
     formatter(row, column, val) {
       return {
-        1: '在职',
-        2: '离职',
-        3: '试用期',
+        1: '事假',
+        2: '调休',
+        3: '年假',
       }[val]
     },
   },
   {
-    label: '用户状态',
-    property: 'state',
-    formatter(row, column, val) {
-      return {
-        1: '在职',
-        2: '离职',
-        3: '试用期',
-      }[val]
-    },
+    label: '休假原因',
+    property: 'reason',
   },
   {
-    label: '注册时间',
-    property: 'createTime',
-    formatter(row, column, val) {
-      return utils.FormatDate(val, 'YYYY-MM-DD HH:mm:ss')
-    },
+    label: '申请时间',
+    property: 'role',
   },
   {
-    label: '最后登陆时间',
-    property: 'lastLoginTime',
-    formatter(row, column, val) {
-      return utils.FormatDate(val, 'YYYY-MM-DD HH:mm:ss')
-    },
+    label: '审批人',
+    property: 'role',
+  },
+  {
+    label: '当前审批人',
+    property: 'role',
+  },
+  {
+    label: '审批状态',
+    property: 'role',
   },
 ])
 
