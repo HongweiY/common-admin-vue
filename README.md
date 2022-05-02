@@ -1,7 +1,15 @@
-# Vue 3 + Vite
+# common-admin-vue
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+这是一个基于vue3+vite+element-plus完成的一个后台管理系统。
+### 目前已经完成的功能：
+- 登陆
+- 动态路由
+- 菜单管理
+- 权限管理
 
-## Recommended IDE Setup
+### 等待完成的功能
+- 系统概览
+- 动态菜单图标
+- others
 
-- [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
+
