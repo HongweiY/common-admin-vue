@@ -136,4 +136,13 @@ export default {
       data: {},
     })
   },
+  // 审批
+  getLeaveList(params) {
+    return request({
+      url: '/leave/list',
+      method: 'get',
+      data: params,
+      mock: true,
+    })
+  },
 }

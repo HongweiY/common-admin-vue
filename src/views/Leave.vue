@@ -1,9 +1,9 @@
-<template>
+<template xmlns:el-row="http://www.w3.org/1999/html">
   <div class="user">
     <div class="query-form">
       <el-form ref="queryForm" :inline="true" :model="query">
-        <el-form-item label="审批状态" prop="state">
-          <el-select v-model="query.state" placeholder="请选择状态">
+        <el-form-item label="审批状态" prop="applyState">
+          <el-select v-model="query.applyState" placeholder="请选择状态">
             <el-option :value="0" label="所有" />
             <el-option :value="1" label="待审批" />
             <el-option :value="2" label="审批中" />
@@ -14,16 +14,15 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handelQuery"> 查询</el-button>
-          <el-button @click="handelRest('userForm')">重置</el-button>
+          <el-button @click="handelRest('leaveForm')">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="base-table">
       <div class="action">
-        <el-button v-has="'user-create'" type="primary" @click="showForm('create', {})"> 新增 </el-button>
-        <el-button v-has="'user-batch-delete'" type="danger" @click="batchDelete"> 批量删除 </el-button>
+        <el-button v-has="'leave-create'" type="primary" @click="showForm('create', {})">申请休假</el-button>
       </div>
-      <el-table :data="userList" @selection-change="handleSelectionChange">
+      <el-table :data="leaveList">
         <el-table-column type="selection" width="55" />
         <el-table-column
           v-for="item in columns"
@@ -34,8 +33,8 @@
         />
         <el-table-column label="操作" width="240">
           <template #default="scope">
-            <el-button v-has="'user-edit'" @click="showForm('edit', scope.row)"> 编辑 </el-button>
-            <el-button v-has="'user-delete'" type="danger" @click="userDel(scope.row)"> 删除 </el-button>
+            <el-button v-has="'user-edit'" @click="showForm('edit', scope.row)"> 查看</el-button>
+            <el-button v-has="'user-delete'" type="danger" @click="userDel(scope.row)"> 作废</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -49,38 +48,60 @@
         @current-change="handelPageChange"
       />
     </div>
-    <!-- 添加用户-->
-    <el-dialog v-model="userFormVisible" :title="formMethod === 'edit' ? '编辑用户' : '新增用户'">
-      <el-form ref="userCreateFormRef" :model="userCreateForm" :label-width="formLabelWidth" :rules="rules">
-        <el-form-item prop="userName" label="用户名">
-          <el-input v-model="userCreateForm.userName" placeholder="请输入用户名" :disabled="formMethod === 'edit'" />
+    <!-- 申请修改 -->
+    <el-dialog v-model="applyFormVisible" title="休假申请">
+      <el-form ref="applyFormRef" :model="leaveForm" :label-width="formLabelWidth.value" :rules="rules">
+        <el-form-item prop="applyTpe" label="休假类型">
+          <el-select v-model="leaveForm.applyTpe" placeholder="请选择休假类型">
+            <el-option label="事假" :value="1" />
+            <el-option label="调休" :value="2" />
+            <el-option label="年假" :value="3" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="休假时间">
+          <el-row>
+            <el-col :spam="8">
+              <el-form-item>
+                <el-date-picker />
+              </el-form-item>
+            </el-col>
+            <el-col :span="1">-</el-col>
+            <el-col :spam="8">
+              <el-form-item>
+                <el-date-picker />
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form-item>
+        <el-form-item prop="applyTpe" label="用户名">
+          <el-input v-model="leaveForm.userName" placeholder="请输入用户名" :disabled="formMethod === 'edit'" />
         </el-form-item>
         <el-form-item prop="userEmail" label="邮箱">
-          <el-input v-model="userCreateForm.userEmail" placeholder="请输入邮箱" :disabled="formMethod === 'edit'">
+          <el-input v-model="leaveForm.userEmail" placeholder="请输入邮箱" :disabled="formMethod === 'edit'">
             <template #append> @ymfsder.com</template>
           </el-input>
         </el-form-item>
         <el-form-item prop="mobile" label="手机号">
-          <el-input v-model="userCreateForm.mobile" placeholder="请输入手机号" />
+          <el-input v-model="leaveForm.mobile" placeholder="请输入手机号" />
         </el-form-item>
         <el-form-item prop="job" label="岗位">
-          <el-input v-model="userCreateForm.job" placeholder="请输入岗位" />
+          <el-input v-model="leaveForm.job" placeholder="请输入岗位" />
         </el-form-item>
         <el-form-item prop="state" label="状态">
-          <el-select v-model="userCreateForm.state" placeholder="请选择用户状态">
+          <el-select v-model="leaveForm.state" placeholder="请选择用户状态">
             <el-option label="在职" :value="1" />
             <el-option label="离职" :value="2" />
             <el-option label="试用期" :value="3" />
           </el-select>
         </el-form-item>
         <el-form-item prop="roleList" label="系统角色">
-          <el-select v-model="userCreateForm.roleList" placeholder="请选择系统角色" multiple style="width: 100%">
+          <el-select v-model="leaveForm.roleList" placeholder="请选择系统角色" multiple style="width: 100%">
             <el-option v-for="role in roleList" :key="role._id" :label="role.roleName" :value="role._id" />
           </el-select>
         </el-form-item>
         <el-form-item prop="deptId" label="所属部门">
           <el-cascader
-            v-model="userCreateForm.deptId"
+            v-model="leaveForm.deptId"
             placeholder="请选择用户所属部门"
             :options="deptList"
             style="width: 100%"
@@ -90,8 +111,8 @@
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="handelRest('userCreateFormRef')">取消</el-button>
-          <el-button type="primary" @click="submitUserCreateForm">确定</el-button>
+          <el-button @click="handelRest('applyFormRef')">取消</el-button>
+          <el-button type="primary" @click="submitleaveForm">确定</el-button>
         </span>
       </template>
     </el-dialog>
@@ -104,19 +125,27 @@ import utils from '../utils/utils'
 
 const { proxy } = getCurrentInstance()
 const query = reactive({
-  state: 0,
+  applyState: 0,
 })
-// 新增用户验证
+
+const rules = reactive({
+  userName: [
+    {
+      required: true,
+      message: '请填写用户名',
+      trigger: 'blur',
+    },
+  ],
+})
 
 const formLabelWidth = ref('80px')
 // 表单是否显示
-const userFormVisible = ref(false)
-const userCreateForm = reactive({
+const applyFormVisible = ref(false)
+const leaveForm = reactive({
   state: 3,
 })
 // 当前操作 create新增 edit编辑
 const formMethod = ref('create')
-const selectUserIds = ref([])
 const columns = reactive([
   {
     label: '单号',
@@ -124,7 +153,13 @@ const columns = reactive([
   },
   {
     label: '休假时间',
-    property: 'userEmail',
+    property: '',
+    formatter(row) {
+      return `${utils.FormatDate(row.startTime, 'YYYY-MM-DD HH:mm:ss')}到${utils.FormatDate(
+        row.endTime,
+        'YYYY-MM-DD HH:mm:ss'
+      )}`
+    },
   },
   {
     label: '休假时长',
@@ -143,130 +178,106 @@ const columns = reactive([
   },
   {
     label: '休假原因',
-    property: 'reason',
+    property: 'reasons',
   },
   {
     label: '申请时间',
-    property: 'role',
+    property: 'createTime',
+    formatter(row, column, val) {
+      return utils.FormatDate(val, 'YYYY-MM-DD HH:mm:ss')
+    },
   },
   {
     label: '审批人',
-    property: 'role',
+    property: 'auditUsers',
   },
   {
     label: '当前审批人',
-    property: 'role',
+    property: 'curAuditUserName',
   },
   {
     label: '审批状态',
-    property: 'role',
+    property: 'applyState',
+    formatter(row, column, val) {
+      return {
+        0: '所有',
+        1: '待审批',
+        2: '审批中',
+        3: '审批拒绝',
+        4: '审批通过',
+        5: '作废',
+      }[val]
+    },
   },
 ])
 
-const userList = ref([])
+const leaveList = ref([])
 const pager = reactive({
   pageNum: 1,
   pageSize: 10,
 })
 const roleList = ref([])
 const deptList = ref([])
-onMounted(() => {
-  getUserList()
-})
-
-// 获取用户列表
-const getUserList = async () => {
-  const params = { ...user, ...pager }
+const getApplyList = async () => {
+  const params = { ...query, ...pager }
   try {
-    const { list, page } = await proxy.$api.getUserList(params)
-    userList.value = list
+    const { list, page } = await proxy.$api.getLeaveList(params)
+    leaveList.value = list
     pager.total = page.total
   } catch (e) {
     proxy.$message.error('服务器异常')
     throw e
   }
 }
+
+onMounted(() => {
+  getApplyList()
+})
+
 // 处理查询
 const handelQuery = () => {
-  getUserList()
+  getApplyList()
 }
 // 处理重置
 const handelRest = form => {
-  if (form === 'userCreateFormRef') {
-    userFormVisible.value = false
+  if (form === 'applyFormRef') {
+    applyFormVisible.value = false
   }
   proxy.$refs[form].resetFields()
 }
 // 处理翻页
 const handelPageChange = currentPage => {
   pager.pageNum = currentPage
-  getUserList()
+  getApplyList()
 }
-// 删除单个用户
-const userDel = async row => {
-  await proxy.$api.userDel({ ids: [row._id] })
-  proxy.$message.success('删除成功')
-  await getUserList()
-}
-// 批量删除用户
-const batchDelete = async () => {
-  if (selectUserIds.value.length === 0) {
-    proxy.$message.error('请选择要删除的用户')
-    return
-  }
-  const nModified = await proxy.$api.userDel({ ids: selectUserIds.value })
-  if (nModified > 0) {
-    selectUserIds.value = []
-    proxy.$message.success('删除成功')
-    await getUserList()
-  }
-}
-// 处理多选
-const handleSelectionChange = list => {
-  list.forEach(item => {
-    selectUserIds.value.push(item._id)
-  })
-}
+
 // 控制表单显示
 const showForm = (method, user) => {
   formMethod.value = method
   proxy.$nextTick(() => {
     if (method === 'edit') {
-      Object.assign(userCreateForm, user)
-      userCreateForm.userEmail = user.userEmail.split('@')[0]
+      Object.assign(leaveForm, user)
+      CreateForm.userEmail = user.userEmail.split('@')[0]
     }
   })
-  userFormVisible.value = true
-  getRoleList()
-  getDeptList()
+  applyFormVisible.value = true
 }
 // 提交
-const submitUserCreateForm = () => {
-  proxy.$refs.userCreateFormRef.validate(async valid => {
+const submitleaveForm = () => {
+  proxy.$refs.applyFormRef.validate(async valid => {
     if (valid) {
-      const params = toRaw(userCreateForm)
+      const params = toRaw(leaveForm)
       params.userEmail += '@ymfsder.com'
       params.action = formMethod.value
       const res = await proxy.$api.createUser(params)
       if (res) {
         userFormVisible.value = false
-        handelRest('userCreateFormRef')
+        handelRest('applyFormRef')
         proxy.$message.success('操作成功')
         await getUserList()
       }
     }
   })
-}
-// 获取部门列表
-const getDeptList = async () => {
-  const list = await proxy.$api.getDeptList()
-  deptList.value = list
-}
-
-// 获取角色列表
-const getRoleList = async () => {
-  const list = await proxy.$api.getAllRolesList()
-  roleList.value = list
 }
 </script>
 

@@ -32,7 +32,7 @@ export default {
   .content-left {
     h2 {
       font-size: 46px;
-      font-width: 300;
+      font-weight: 300;
     }
 
     p {
